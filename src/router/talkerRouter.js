@@ -20,9 +20,10 @@ talkerRouter.get('/', async (req, res) => {
     res.status(200).json(allTalkers);
   });
   
-talkerRouter.get('/:id', (req, res) => {
+talkerRouter.get('/:id', async (req, res) => {
+    const allTalkers = await readAllTalkers();
     const { params: { id: urlId } } = req;
-    const palestrante = talker.find(({ id }) => id === Number(urlId));
+    const palestrante = allTalkers.find(({ id }) => id === Number(urlId));
     if (palestrante) {
       res.status(200).json(palestrante);
     } else {
@@ -38,7 +39,8 @@ validationTalkerTalk,
 validationTalkerWatchedAt,
 validationTalkerRate,
 async (req, res) => {
-    let newId = talker[talker.length - 1].id;
+    const allTalkers = await readAllTalkers();
+    let newId = allTalkers[allTalkers.length - 1].id;
 
     const newTalker = {
         id: newId += 1,
