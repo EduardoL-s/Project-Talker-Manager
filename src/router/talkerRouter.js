@@ -55,6 +55,29 @@ async (req, res) => {
     return res.status(201).json(talker[talker.length - 1]);
 });
 
+talkerRouter.put('/:id', async (req, res) => {
+    const allTalkers = await readAllTalkers();
+    const { params: { id: urlId } } = req;
+    const { body } = req;
+    const palestrante = allTalkers.find(({ id }) => id === Number(urlId));
+
+    palestrante.name = body.name;
+    palestrante.age = body.age;
+    palestrante.watchedAt = body.watchedAt;
+    palestrante.rate = body.rate;
+
+    return res.status(200).json(allTalkers);
+});
+
+talkerRouter.delete('/:id', validationTalkerToken, (req, res) => {
+    const { params: { id: urlId } } = req;
+    const position = talker.findIndex(({ id }) => id === Number(urlId));
+
+    talker.splice(position, 1);
+
+    res.status(204).end();
+});
+
 module.exports = {
     talkerRouter,
 };

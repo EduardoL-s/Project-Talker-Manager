@@ -7,7 +7,7 @@ const {
     validationTalkerTalk,
     validationTalkerWatchedAt,
     validationTalkerRate,
-} = require('./talkerValidations');
+} = require('./talkerPostValidations');
 
 module.exports = {
     validationLoginEmail,
