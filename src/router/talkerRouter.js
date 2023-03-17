@@ -8,7 +8,7 @@ const {
     validationTalkerRate,
     readAllTalkers,
     writeNewTalker,
-    editTalker,
+    writeForDeleteTalker,
 } = require('../middlewares');
 
 const talker = require('../talker.json');
@@ -58,32 +58,14 @@ async (req, res) => {
     return res.status(201).json(talker[talker.length - 1]);
 });
 
-talkerRouter.put('/:id',
-validationTalkerToken,
-validationTalkerName,
-validationTalkerAge,
-validationTalkerTalk,
-validationTalkerWatchedAt,
-validationTalkerRate,
-async (req, res) => {
-    const allTalkers = await readAllTalkers();
-    const { params: { id: urlId } } = req;
-    const { body } = req;
-    const palestrante = allTalkers.find(({ id }) => id === Number(urlId));
-    if (!palestrante) {
-        res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-    }
-    const updatedTalker = {
-        id: palestrante.id,
-        name: body.name,
-        age: body.age,
-        talk: {
-            watchedAt: body.talk.watchedAt,
-            rate: body.talk.rate,
-        },
-    };
-    await editTalker(updatedTalker, palestrante.id);
-    return res.status(200).json(updatedTalker);
+talkerRouter.delete('/:id', validationTalkerToken, async (req, res) => {
+  const allTalkers = await readAllTalkers();
+  const { id: urlId } = req.params;
+  const talkerLeft = allTalkers.filter(({ id }) => id !== Number(urlId));
+
+  await writeForDeleteTalker(talkerLeft);
+
+  return res.status(204).end();
 });
 
 module.exports = {

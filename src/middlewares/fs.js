@@ -22,21 +22,17 @@ const writeNewTalker = async (newTalker) => {
     }
 };
 
-const editTalker = async (editedTalker, urlId) => {
+const writeForDeleteTalker = async (withoutRemoved) => {
     try {
-        const oldTalkers = await readAllTalkers();
-        const position = oldTalkers.findIndex(({ id }) => id === Number(urlId));
-        oldTalkers[position] = editedTalker;
-        const talkerUpdated = JSON.stringify(oldTalkers, null, 2);
-
-        await fs.writeFile(path.resolve(__dirname, '../talker.json'), talkerUpdated);
+        const talkerLeft = JSON.stringify([...withoutRemoved], null, 2);
+        await fs.writeFile(path.resolve(__dirname, '../talker.json'), talkerLeft);
     } catch (error) {
-        console.log(`Erro ao atualizar o arquivo: ${error}`);
+        console.log(`Erro ao tentar deletar algo no arquivo: ${error}`);
     }
 };
 
 module.exports = {
     readAllTalkers,
     writeNewTalker,
-    editTalker,
+    writeForDeleteTalker,
 };

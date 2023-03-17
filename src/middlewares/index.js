@@ -1,4 +1,4 @@
-const { readAllTalkers, writeNewTalker, editTalker } = require('./fs');
+const { readAllTalkers, writeNewTalker, writeForDeleteTalker } = require('./fs');
 const { validationLoginEmail, validationLoginPassword } = require('./loginValidations');
 const {
     validationTalkerToken,
@@ -20,5 +20,5 @@ module.exports = {
     validationTalkerRate,
     readAllTalkers,
     writeNewTalker,
-    editTalker,
+    writeForDeleteTalker,
 };
