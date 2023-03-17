@@ -43,14 +43,5 @@
       "watchedAt": "29/10/2020",
       "rate": 5
     }
-  },
-  {
-    "id": 8,
-    "name": "Zendaya Maree",
-    "age": 24,
-    "talk": {
-      "watchedAt": "25/09/2020",
-      "rate": 5
-    }
   }
 ]

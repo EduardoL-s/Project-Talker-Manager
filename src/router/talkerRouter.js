@@ -8,6 +8,7 @@ const {
     validationTalkerRate,
     readAllTalkers,
     writeNewTalker,
+    editTalker,
 } = require('../middlewares');
 
 const talker = require('../talker.json');
@@ -55,27 +56,32 @@ async (req, res) => {
     return res.status(201).json(talker[talker.length - 1]);
 });
 
-talkerRouter.put('/:id', async (req, res) => {
+talkerRouter.put('/:id',
+validationTalkerToken,
+validationTalkerName,
+validationTalkerAge,
+validationTalkerTalk,
+validationTalkerWatchedAt,
+validationTalkerRate,
+async (req, res) => {
     const allTalkers = await readAllTalkers();
     const { params: { id: urlId } } = req;
     const { body } = req;
     const palestrante = allTalkers.find(({ id }) => id === Number(urlId));
-
-    palestrante.name = body.name;
-    palestrante.age = body.age;
-    palestrante.watchedAt = body.watchedAt;
-    palestrante.rate = body.rate;
-
-    return res.status(200).json(allTalkers);
-});
-
-talkerRouter.delete('/:id', validationTalkerToken, (req, res) => {
-    const { params: { id: urlId } } = req;
-    const position = talker.findIndex(({ id }) => id === Number(urlId));
-
-    talker.splice(position, 1);
-
-    res.status(204).end();
+    if (!palestrante) {
+        res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+    const updatedTalker = {
+        id: palestrante.id,
+        name: body.name,
+        age: body.age,
+        talk: {
+            watchedAt: body.talk.watchedAt,
+            rate: body.talk.rate,
+        },
+    };
+    await editTalker(updatedTalker, palestrante.id);
+    return res.status(200).json(updatedTalker);
 });
 
 module.exports = {
