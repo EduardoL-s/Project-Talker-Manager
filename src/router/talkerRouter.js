@@ -6,7 +6,7 @@ const {
     validationTalkerTalk,
     validationTalkerWatchedAt,
     validationTalkerRate,
-    // readAllTalkers,
+    readAllTalkers,
     writeNewTalker,
 } = require('../middlewares');
 
@@ -14,8 +14,9 @@ const talker = require('../talker.json');
 
 const talkerRouter = Router();
 
-talkerRouter.get('/', (req, res) => {
-    res.status(200).json(talker);
+talkerRouter.get('/', async (req, res) => {
+    const allTalkers = await readAllTalkers();
+    res.status(200).json(allTalkers);
   });
   
 talkerRouter.get('/:id', (req, res) => {
