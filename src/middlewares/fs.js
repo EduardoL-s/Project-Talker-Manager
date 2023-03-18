@@ -22,6 +22,15 @@ const writeNewTalker = async (newTalker) => {
     }
 };
 
+const writeAlterationInTalker = async (talkersAfterAlteration) => {
+    try {
+        const newTalkerList = JSON.stringify([...talkersAfterAlteration], null, 2);
+        await fs.writeFile(path.resolve(__dirname, '../talker.json'), newTalkerList);
+    } catch (error) {
+        console.log(`Erro ao tentar alterar o arquivo: ${error}`);
+    }
+};
+
 const writeForDeleteTalker = async (withoutRemoved) => {
     try {
         const talkerLeft = JSON.stringify([...withoutRemoved], null, 2);
@@ -34,5 +43,6 @@ const writeForDeleteTalker = async (withoutRemoved) => {
 module.exports = {
     readAllTalkers,
     writeNewTalker,
+    writeAlterationInTalker,
     writeForDeleteTalker,
 };
